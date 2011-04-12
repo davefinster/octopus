@@ -6,6 +6,10 @@ module Octopus
     @env ||= 'octopus'
   end
 
+  def self.config
+    @config
+  end
+
   def self.rails_env()
     @rails_env ||= self.rails? ? Rails.env.to_s : 'shards'
   end
@@ -27,7 +31,6 @@ module Octopus
   end
 
   def self.config()
-    puts "STARTING OCT"
     if File.exists? Octopus.file_name
       @config ||= HashWithIndifferentAccess.new(YAML.load(ERB.new(Octopus.config_data).result))[Octopus.env()]
 
