@@ -27,7 +27,7 @@ module Octopus
   end
 
   def self.config()
-    
+    puts "STARTING OCT"
     if File.exists? Octopus.file_name
       @config ||= HashWithIndifferentAccess.new(YAML.load(ERB.new(Octopus.config_data).result))[Octopus.env()]
 
