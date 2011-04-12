@@ -10,11 +10,26 @@ module Octopus
     @rails_env ||= self.rails? ? Rails.env.to_s : 'shards'
   end
 
-  def self.config()
+  def self.config_data=(config_data)
+    @config_data = config_data
+  end
+  
+  def self.file_name
     file_name = Octopus.directory() + "/config/shards.yml"
+  end
+  
+  def self.config_data
+    if !@config_data
+      File.open(Octopus.file_name).read()
+    else
+      @config_data
+    end
+  end
 
-    if File.exists? file_name
-      @config ||= HashWithIndifferentAccess.new(YAML.load(ERB.new(File.open(file_name).read()).result))[Octopus.env()]
+  def self.config()
+    
+    if File.exists? Octopus.file_name
+      @config ||= HashWithIndifferentAccess.new(YAML.load(ERB.new(Octopus.config_data).result))[Octopus.env()]
 
       if @config && @config['environments']
         self.environments = @config['environments']
